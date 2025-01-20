@@ -1,4 +1,13 @@
+import HackerNews from "@/components/fetch/HackerNews/hackerNews";
 import { Button } from "@/components/ui/button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+
 import Link from "next/link";
 
 export default function Home() {
@@ -16,6 +25,18 @@ export default function Home() {
         <Button className="col-span-2 md:col-span-1 md:col-start-1" asChild>
           <Link href="/docs">Go to Docs!</Link>
         </Button>
+
+        <Carousel className="col-span-4 col-start-3 row-start-4 mt-12">
+          <CarouselContent>
+            <CarouselItem>
+              <HackerNews />
+            </CarouselItem>
+            <CarouselItem>HELLO2</CarouselItem>
+            <CarouselItem>HELLO3</CarouselItem>
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
       </main>
       <footer className="flex flex-wrap items-center justify-center gap-6"></footer>
     </div>
