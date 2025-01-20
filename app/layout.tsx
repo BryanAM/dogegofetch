@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import localFont from "next/font/local";
 import "./globals.css";
+import Link from "next/link";
+import dog from "../public/assets/shiba-inu-icon.svg";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
   weight: "100 900",
 });
 
@@ -25,9 +23,28 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.className} antialiased`}>
+        <header>
+          <nav className="col flex gap-2 border-b-2 border-muted p-2">
+            <Link className="flex items-center text-sm font-bold" href="/">
+              <Image src={dog} width={32} height={32} alt="dog icon" /> Doge Go
+              Fetch
+            </Link>
+            <Link
+              className="font-secondary flex items-center text-center text-sm text-primary/70 hover:text-primary"
+              href="about"
+            >
+              About
+            </Link>
+            <Link
+              className="flex items-center text-sm text-primary/70 hover:text-primary"
+              href="docs"
+            >
+              Go Fetch Docs
+            </Link>
+          </nav>
+        </header>
+
         {children}
       </body>
     </html>
