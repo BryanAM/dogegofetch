@@ -9,6 +9,8 @@ export default function About() {
 
       <h2>Built With</h2>
 
+      <h2>APIs Used</h2>
+
       <h2>Attributions</h2>
       <Image src={dog} alt="shiba inu" />
       <Link
