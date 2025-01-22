@@ -26,7 +26,7 @@ export default function Home() {
           <Link href="/docs">Go to Examples!</Link>
         </Button>
 
-        <Carousel className="col-span-4 col-start-3 row-start-4 mt-12">
+        <Carousel className="col-span-6 col-start-2 row-start-4 mt-12 md:col-span-4 md:col-start-3">
           <CarouselContent>
             <CarouselItem>
               <HackerNews />
