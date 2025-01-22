@@ -23,7 +23,7 @@ export default function Home() {
           the full potential of APIs!
         </h2>
         <Button className="col-span-2 md:col-span-1 md:col-start-1" asChild>
-          <Link href="/docs">Go to Docs!</Link>
+          <Link href="/docs">Go to Examples!</Link>
         </Button>
 
         <Carousel className="col-span-4 col-start-3 row-start-4 mt-12">

@@ -40,7 +40,7 @@ export default function RootLayout({
               className="flex items-center text-sm text-primary/70 hover:text-primary"
               href="docs"
             >
-              Go Fetch Docs
+              Examples
             </Link>
           </nav>
         </header>
