@@ -2,7 +2,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -22,16 +21,38 @@ type JobStory = {
   url: string;
 };
 
+async function fetchJobPost(id: string) {
+  try {
+    const res = await fetch(
+      `https://hacker-news.firebaseio.com/v0/item/${id}.json`,
+    );
+    const jobStory: JobStory = await res.json();
+
+    // Validate jobStory
+    if (!jobStory || !jobStory.id || !jobStory.title || !jobStory.url) {
+      console.log("One or more item in a job story had missing data");
+      return null;
+    }
+
+    return jobStory;
+  } catch (err) {
+    console.error("No job with ID was found, ", err);
+    return null;
+  }
+}
+
 export default async function JobStory(props: JobStoryProps) {
   const { id } = props;
-  const res = await fetch(
-    `https://hacker-news.firebaseio.com/v0/item/${id}.json`,
-  );
 
-  const jobStory: JobStory = await res.json();
+  const jobStory: JobStory | null = await fetchJobPost(id);
+
+  if (!jobStory || !jobStory.url) {
+    return;
+  }
+
   const time = new Date(jobStory.time * 1000).toLocaleTimeString();
   const date = new Date(jobStory.time * 1000).toLocaleDateString();
-  console.log(jobStory);
+
   return (
     <Card className="relative">
       <CardHeader className="p-2">
