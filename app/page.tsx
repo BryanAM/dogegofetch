@@ -28,14 +28,14 @@ export default function Home() {
         </Button>
 
         <Carousel className="col-span-6 col-start-2 row-start-4 mt-12 md:col-span-4 md:col-start-3">
-          <CarouselContent>
-            <CarouselItem>
+          <CarouselContent className="h-96">
+            <CarouselItem className="h-full overflow-auto">
               <HackerNews />
             </CarouselItem>
-            <CarouselItem>
+            <CarouselItem className="h-96">
               <Weather />
             </CarouselItem>
-            <CarouselItem>HELLO3</CarouselItem>
+            <CarouselItem className="">HELLO3</CarouselItem>
           </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />

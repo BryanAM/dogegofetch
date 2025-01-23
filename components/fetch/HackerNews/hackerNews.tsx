@@ -17,7 +17,7 @@ export default async function HackerNews() {
   const jobIDs: string[] = await fetchJobIDs();
 
   return (
-    <section className="flex max-h-80 flex-col gap-2 overflow-y-scroll p-2">
+    <section className="flex flex-col gap-2 overflow-y-scroll p-2">
       <h3 className="text-xl font-bold">Hacker News Jobs Board API</h3>
       {jobIDs.length > 0 ? (
         jobIDs.map((id: string) => <JobStory key={id} id={id} />)
