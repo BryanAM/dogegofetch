@@ -1,14 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { TrendingUp } from "lucide-react";
-import {
-  CartesianGrid,
-  LabelList,
-  Line,
-  LineChart,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
 import {
   Card,
@@ -26,8 +19,12 @@ import {
 } from "@/components/ui/chart";
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  new_york: {
+    label: "New York",
+    color: "hsl(var(--chart-1))",
+  },
+  san_diego: {
+    label: "San Deigo",
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
@@ -95,7 +92,8 @@ const defaultWeatherData = [
 const defaultLocation = {};
 
 export function WeatherChart() {
-  const [location, setLocation] = useState("New York");
+  const [activeChart, setActiveChart] =
+    useState<keyof typeof chartConfig>("new_york");
   const [weatherData, setWeatherData] = useState(defaultWeatherData);
 
   useEffect(() => {
@@ -107,23 +105,27 @@ export function WeatherChart() {
       <CardHeader className="grid grid-cols-8 space-y-0 p-0">
         <div className="col-span-4 m-4">
           <CardTitle className="text-sm lg:text-xl">
-            Average Temperatures in {location}
+            Average Temperatures in {chartConfig[activeChart].label}
           </CardTitle>
           <CardDescription>
             {weatherData[0].day} ~ {weatherData[weatherData.length - 1].day}{" "}
           </CardDescription>
         </div>
-        <button className="col-span-2 border-l-2">
-          <span className="text-sm font-bold leading-none lg:text-xl">
-            New York
-          </span>
-        </button>
-        <button className="hover:bg- col-span-2 border-l-2">
-          {" "}
-          <span className="text-sm font-bold leading-none lg:text-xl">
-            San Deigo
-          </span>
-        </button>
+        {Object.entries(chartConfig).map(([key, value]) => {
+          const typedKey = key as keyof typeof chartConfig;
+          return (
+            <button
+              key={typedKey}
+              data-active={activeChart === typedKey}
+              className="col-span-2 border-l-2 transition-all duration-700 ease-in data-[active=true]:bg-primary/10"
+              onClick={() => setActiveChart(typedKey)}
+            >
+              <span className="text-sm font-bold leading-none lg:text-xl">
+                {value.label}
+              </span>
+            </button>
+          );
+        })}
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-40 w-full">
@@ -159,22 +161,15 @@ export function WeatherChart() {
             <Line
               dataKey="tempAvg"
               type="natural"
-              stroke="var(--color-desktop)"
+              stroke="var(--color-new_york)"
               strokeWidth={2}
               dot={{
-                fill: "var(--color-desktop)",
+                fill: "var(--color-new_york)",
               }}
               activeDot={{
                 r: 6,
               }}
-            >
-              <LabelList
-                position="bottom"
-                offset={12}
-                className="fill-foreground"
-                fontSize={12}
-              />
-            </Line>
+            ></Line>
           </LineChart>
         </ChartContainer>
       </CardContent>
