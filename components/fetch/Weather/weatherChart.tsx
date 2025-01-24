@@ -21,7 +21,7 @@ import {
 const chartConfig = {
   new_york: {
     label: "New York",
-    color: "hsl(var(--chart-1))",
+    color: "hsl(var(--chart-2))",
   },
   san_diego: {
     label: "San Deigo",
@@ -80,21 +80,36 @@ function formatDate(dateString: string) {
   return `${dayOfWeek} ${day}`;
 }
 
-const defaultWeatherData = [
-  { day: formatDate("2025-01-23T11:00:00Z"), tempAvg: 24.84 },
-  { day: formatDate("2025-01-24T11:00:00Z"), tempAvg: 21.33 },
-  { day: formatDate("2025-01-25T11:00:00Z"), tempAvg: 22.6 },
-  { day: formatDate("2025-01-26T11:00:00Z"), tempAvg: 21.21 },
-  { day: formatDate("2025-01-27T11:00:00Z"), tempAvg: 27.67 },
-  { day: formatDate("2025-01-28T11:00:00Z"), tempAvg: 22.79 },
-];
+const _rawWeatherData = {
+  new_york: [
+    { day: formatDate("2025-01-23T11:00:00Z"), tempAvg: 24.84 },
+    { day: formatDate("2025-01-24T11:00:00Z"), tempAvg: 21.33 },
+    { day: formatDate("2025-01-25T11:00:00Z"), tempAvg: 22.6 },
+    { day: formatDate("2025-01-26T11:00:00Z"), tempAvg: 21.21 },
+    { day: formatDate("2025-01-27T11:00:00Z"), tempAvg: 27.67 },
+    { day: formatDate("2025-01-28T11:00:00Z"), tempAvg: 22.79 },
+  ],
+  san_diego: [
+    { day: formatDate("2025-01-23T11:00:00Z"), tempAvg: 64.84 },
+    { day: formatDate("2025-01-24T11:00:00Z"), tempAvg: 61.33 },
+    { day: formatDate("2025-01-25T11:00:00Z"), tempAvg: 62.6 },
+    { day: formatDate("2025-01-26T11:00:00Z"), tempAvg: 61.21 },
+    { day: formatDate("2025-01-27T11:00:00Z"), tempAvg: 67.67 },
+    { day: formatDate("2025-01-28T11:00:00Z"), tempAvg: 62.79 },
+  ],
+};
 
 const defaultLocation = {};
 
 export function WeatherChart() {
   const [activeChart, setActiveChart] =
     useState<keyof typeof chartConfig>("new_york");
-  const [weatherData, setWeatherData] = useState(defaultWeatherData);
+  const [weatherData, setWeatherData] = useState(_rawWeatherData[activeChart]);
+
+  const onClick = (key) => {
+    setActiveChart(key);
+    setWeatherData(_rawWeatherData[key]);
+  };
 
   useEffect(() => {
     getLocation();
@@ -118,7 +133,7 @@ export function WeatherChart() {
               key={typedKey}
               data-active={activeChart === typedKey}
               className="col-span-2 border-l-2 transition-all duration-700 ease-in data-[active=true]:bg-primary/10"
-              onClick={() => setActiveChart(typedKey)}
+              onClick={() => onClick(typedKey)}
             >
               <span className="text-sm font-bold leading-none lg:text-xl">
                 {value.label}
@@ -161,10 +176,10 @@ export function WeatherChart() {
             <Line
               dataKey="tempAvg"
               type="natural"
-              stroke="var(--color-new_york)"
+              stroke={`var(--color-${activeChart})`}
               strokeWidth={2}
               dot={{
-                fill: "var(--color-new_york)",
+                fill: `var(--color-${activeChart})`,
               }}
               activeDot={{
                 r: 6,
