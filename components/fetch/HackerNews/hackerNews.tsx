@@ -2,10 +2,23 @@ import JobStory from "./jobStory";
 
 async function fetchJobIDs(): Promise<string[]> {
   try {
-    const jobIDs = await fetch(
+    const res = await fetch(
       "https://hacker-news.firebaseio.com/v0/jobstories.json",
     );
-    return await jobIDs.json();
+
+    if (!res.ok) {
+      throw new Error(
+        `Failed to fetch job IDs: ${res.status} ${res.statusText}`,
+      );
+    }
+
+    const jobIDs = await res.json();
+
+    if (!Array.isArray(jobIDs)) {
+      throw new Error("Invalid response: job IDs are not an array");
+    }
+
+    return jobIDs;
   } catch (err) {
     console.error("Error fetching job IDs from Hacker News:", err);
     return [];
