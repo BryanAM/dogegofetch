@@ -4,7 +4,6 @@ async function fetchJobIDs(): Promise<string[]> {
   try {
     const jobIDs = await fetch(
       "https://hacker-news.firebaseio.com/v0/jobstories.json",
-      { cache: "no-store" },
     );
     return await jobIDs.json();
   } catch (err) {
