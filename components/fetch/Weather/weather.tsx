@@ -72,24 +72,29 @@ const cleanedData = (rawData: any) => {
 };
 
 export async function Weather() {
-  const _rawNY = await getWeather("10001 US");
-  const _rawSD = await getWeather("92115 US");
+  const _rawNY = null;
+  const _rawSD = null;
+  // const [_rawNY, _rawSD] = await Promise.all([
+  //   getWeather("10001 US"),
+  //   getWeather("92115 US"),
+  // ]);
+
   let weatherData: WeatherData = {
     new_york: [
-      { time: formatDate("2025-01-23T11:00:00Z"), temperatureAvg: 24.84 },
+      { time: formatDate("2025-01-23T11:00:00Z"), temperatureAvg: 74.84 },
       { time: formatDate("2025-01-24T11:00:00Z"), temperatureAvg: 21.33 },
       { time: formatDate("2025-01-25T11:00:00Z"), temperatureAvg: 22.6 },
-      { time: formatDate("2025-01-26T11:00:00Z"), temperatureAvg: 21.21 },
+      { time: formatDate("2025-01-26T11:00:00Z"), temperatureAvg: 61.21 },
       { time: formatDate("2025-01-27T11:00:00Z"), temperatureAvg: 27.67 },
-      { time: formatDate("2025-01-28T11:00:00Z"), temperatureAvg: 22.79 },
+      { time: formatDate("2025-01-28T11:00:00Z"), temperatureAvg: 12.79 },
     ],
     san_diego: [
-      { time: formatDate("2025-01-23T11:00:00Z"), temperatureAvg: 64.84 },
+      { time: formatDate("2025-01-23T11:00:00Z"), temperatureAvg: 54.84 },
       { time: formatDate("2025-01-24T11:00:00Z"), temperatureAvg: 61.33 },
-      { time: formatDate("2025-01-25T11:00:00Z"), temperatureAvg: 62.6 },
-      { time: formatDate("2025-01-26T11:00:00Z"), temperatureAvg: 61.21 },
+      { time: formatDate("2025-01-25T11:00:00Z"), temperatureAvg: 72.6 },
+      { time: formatDate("2025-01-26T11:00:00Z"), temperatureAvg: 31.21 },
       { time: formatDate("2025-01-27T11:00:00Z"), temperatureAvg: 67.67 },
-      { time: formatDate("2025-01-28T11:00:00Z"), temperatureAvg: 62.79 },
+      { time: formatDate("2025-01-28T11:00:00Z"), temperatureAvg: 82.79 },
     ],
   };
 

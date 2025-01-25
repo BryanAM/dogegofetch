@@ -41,8 +41,6 @@ export function WeatherChart({
 }: {
   apiWeatherData: WeatherData;
 }) {
-  console.log(apiWeatherData);
-
   const [activeChart, setActiveChart] =
     useState<keyof typeof chartConfig>("new_york");
   const [weatherData, setWeatherData] = useState<
@@ -102,7 +100,7 @@ export function WeatherChart({
               interval="preserveStartEnd"
             />
             <YAxis
-              domain={[10, 70]}
+              domain={[10, 85]}
               stroke="hsl(var(--border))"
               tickLine={true}
               axisLine={false}
