@@ -1,9 +1,15 @@
 import queryString from "querystring";
 import { WeatherChart } from "./weatherChart";
 
-async function getWeather() {
+type WeatherData = {
+  [key in "new_york" | "san_diego"]: Array<{
+    time: string;
+    temperatureAvg: number;
+  }>;
+};
+
+async function getWeather(location: string) {
   const API_KEY = process.env.WEATHER_API;
-  const location = "new york";
   const units = "imperial";
   const timestep = ["1d"];
   const weatherForecastURL = "https://api.tomorrow.io/v4/weather/forecast";
@@ -25,31 +31,84 @@ async function getWeather() {
     },
   };
 
-  // try {
-  //   const res = await fetch(
-  //     `${weatherForecastURL}?${weatherForecastParams}`,
-  //     options,
-  //   );
-  //   return await res.json();
-  // } catch (err) {
-  //   console.log("error getting weather data, ", err);
-  //   return null;
-  // }
+  try {
+    const res = await fetch(`${weatherForecastURL}?${weatherForecastParams}`, {
+      ...options,
+    });
+    return await res.json();
+  } catch (err) {
+    console.log("error getting weather data, ", err);
+    return null;
+  }
 }
 
+function formatDate(dateString: string) {
+  const date = new Date(dateString);
+  const dayOfWeek = new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+  })
+    .format(date)
+    .slice(0, 3);
+  const day = date.getDate();
+  return `${dayOfWeek} ${day}`;
+}
+
+// Just using any to save time becuase there is hundreds of types on this data
+// in production we would actually use a type here
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const cleanedData = (rawData: any) => {
+  return rawData.map(
+    ({
+      time,
+      values,
+    }: {
+      time: string;
+      values: { temperatureAvg: number };
+    }) => ({
+      time: formatDate(time),
+      temperatureAvg: values.temperatureAvg,
+    }),
+  );
+};
+
 export async function Weather() {
-  // const weatherData = await getWeather();
-  // const dailyWeatherForecastData = weatherData?.timelines?.daily;
-  // console.log(dailyWeatherForecastData);
-  // const cleanedData = dailyWeatherForecastData.map(({ time, values }) => ({
-  //   time,
-  //   temperatureAvg: values.temperatureAvg,
-  // }));
+  const _rawNY = await getWeather("10001 US");
+  const _rawSD = await getWeather("92115 US");
+  let weatherData: WeatherData = {
+    new_york: [
+      { time: formatDate("2025-01-23T11:00:00Z"), temperatureAvg: 24.84 },
+      { time: formatDate("2025-01-24T11:00:00Z"), temperatureAvg: 21.33 },
+      { time: formatDate("2025-01-25T11:00:00Z"), temperatureAvg: 22.6 },
+      { time: formatDate("2025-01-26T11:00:00Z"), temperatureAvg: 21.21 },
+      { time: formatDate("2025-01-27T11:00:00Z"), temperatureAvg: 27.67 },
+      { time: formatDate("2025-01-28T11:00:00Z"), temperatureAvg: 22.79 },
+    ],
+    san_diego: [
+      { time: formatDate("2025-01-23T11:00:00Z"), temperatureAvg: 64.84 },
+      { time: formatDate("2025-01-24T11:00:00Z"), temperatureAvg: 61.33 },
+      { time: formatDate("2025-01-25T11:00:00Z"), temperatureAvg: 62.6 },
+      { time: formatDate("2025-01-26T11:00:00Z"), temperatureAvg: 61.21 },
+      { time: formatDate("2025-01-27T11:00:00Z"), temperatureAvg: 67.67 },
+      { time: formatDate("2025-01-28T11:00:00Z"), temperatureAvg: 62.79 },
+    ],
+  };
+
+  if (_rawNY && _rawSD) {
+    const nyDailyWeather = {
+      new_york: cleanedData(_rawNY?.timelines?.daily),
+    };
+
+    const sdDailyWeather = {
+      san_diego: cleanedData(_rawSD?.timelines?.daily),
+    };
+
+    weatherData = { ...nyDailyWeather, ...sdDailyWeather };
+  }
 
   return (
     <section className="h-full w-full">
       <h3 className="text-xl font-bold">Tomorrow Weather API</h3>
-      <WeatherChart />
+      <WeatherChart apiWeatherData={weatherData} />
     </section>
   );
 }
