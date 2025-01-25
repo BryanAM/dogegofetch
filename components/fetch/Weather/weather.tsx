@@ -37,7 +37,7 @@ async function getWeather(location: string) {
     });
     return await res.json();
   } catch (err) {
-    console.log("error getting weather data, ", err);
+    console.log("error getting weather data default to static data, ", err);
     return null;
   }
 }
@@ -72,12 +72,12 @@ const cleanedData = (rawData: any) => {
 };
 
 export async function Weather() {
-  const _rawNY = null;
-  const _rawSD = null;
-  // const [_rawNY, _rawSD] = await Promise.all([
-  //   getWeather("10001 US"),
-  //   getWeather("92115 US"),
-  // ]);
+  // const _rawNY = null;
+  // const _rawSD = null;
+  const [_rawNY, _rawSD] = await Promise.all([
+    getWeather("10001 US"),
+    getWeather("92115 US"),
+  ]);
 
   let weatherData: WeatherData = {
     new_york: [
