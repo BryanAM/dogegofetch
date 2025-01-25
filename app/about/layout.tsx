@@ -3,5 +3,5 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className="flex flex-col">{children}</div>;
+  return <div className="grid grid-cols-4 p-24">{children}</div>;
 }
