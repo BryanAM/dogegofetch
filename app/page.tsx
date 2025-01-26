@@ -8,6 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import Eco from "@/components/ws/echo/eco";
 
 import Link from "next/link";
 
@@ -35,7 +36,9 @@ export default function Home() {
             <CarouselItem className="h-96">
               <Weather />
             </CarouselItem>
-            <CarouselItem className="">Last Item</CarouselItem>
+            <CarouselItem className="">
+              <Eco />
+            </CarouselItem>
           </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />
