@@ -72,12 +72,18 @@ const cleanedData = (rawData: any) => {
 };
 
 export async function Weather() {
-  // const _rawNY = null;
-  // const _rawSD = null;
-  const [_rawNY, _rawSD] = await Promise.all([
-    getWeather("10001 US"),
-    getWeather("92115 US"),
-  ]);
+  let _rawNY;
+  let _rawSD;
+
+  if (process.env.NODE_ENV === "production") {
+    [_rawNY, _rawSD] = await Promise.all([
+      getWeather("10001 US"),
+      getWeather("92115 US"),
+    ]);
+  } else {
+    _rawNY = null;
+    _rawSD = null;
+  }
 
   let weatherData: WeatherData = {
     new_york: [

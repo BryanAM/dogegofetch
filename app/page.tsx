@@ -35,7 +35,7 @@ export default function Home() {
             <CarouselItem className="h-96">
               <Weather />
             </CarouselItem>
-            <CarouselItem className="">HELLO3</CarouselItem>
+            <CarouselItem className="">Last Item</CarouselItem>
           </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />
