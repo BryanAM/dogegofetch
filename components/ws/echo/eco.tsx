@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState, useRef } from "react";
 import {
   Card,
   CardFooter,
@@ -21,6 +22,8 @@ import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import type { MessageType } from "./types";
+import Message from "./message";
 
 const formSchema = z.object({
   message: z
@@ -30,6 +33,12 @@ const formSchema = z.object({
 });
 
 export default function WSEcho() {
+  const id = useRef(0);
+  const messageContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const [socket, setSoket] = useState<WebSocket | null>(null);
+  const [chat, setChat] = useState<MessageType[]>([]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: "onChange",
@@ -38,16 +47,94 @@ export default function WSEcho() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  function formatDateNow() {
+    const date = new Date(Date.now());
+
+    const shortWeekday = date.toLocaleString("en-US", { weekday: "short" });
+    // e.g. "Mon"
+
+    let hours = date.getHours(); // 0-23
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const amOrPm = hours >= 12 ? "PM" : "AM";
+
+    // Convert 0-23 hours to 1-12
+    hours = hours % 12 || 12;
+
+    return `${shortWeekday} ${hours}:${minutes}${amOrPm}`;
   }
+
+  const createNewMessage = (person: "me" | "echo", message: string) => {
+    id.current += 1;
+    return {
+      person: person,
+      message: message,
+      id: id.current,
+      time: formatDateNow(),
+    };
+  };
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    const message: MessageType = createNewMessage("me", values.message);
+    setChat((prev) => [...prev, message]);
+    if (socket?.OPEN) {
+      socket?.send(message.message);
+    }
+  }
+
+  function handleScroll() {
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollTo({
+        top: messageContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }
+
+  useEffect(() => {
+    const ws = new WebSocket("https://echo.websocket.org", "TBC");
+    ws.onopen = () => {
+      console.log("Connected");
+      setSoket(ws);
+    };
+
+    ws.onerror = (error) => {
+      console.error("WebSocket Error", error);
+      setSoket(null);
+    };
+
+    ws.onmessage = (event) => {
+      const { data } = event;
+      console.log("message recieved: ", data);
+      const message: MessageType = createNewMessage("echo", data);
+      setChat((prev) => [...prev, message]);
+    };
+
+    return () => {
+      ws.close();
+      setSoket(null);
+    };
+  }, []);
+
+  useEffect(() => {
+    handleScroll();
+    form.reset();
+  }, [chat]);
 
   return (
     <section className="center m-auto h-full max-w-lg p-1">
       <Card className="flex h-full w-full flex-col">
-        <CardHeader className="bg-secondary">header</CardHeader>
-        <CardContent className="flex-grow">content</CardContent>
-        <CardFooter className="justify-center border-t-2 pb-12 pt-4">
+        <CardHeader className="bg-secondary p-2">
+          <h3 className="text-md font-bold">Websockets with Echo</h3>
+        </CardHeader>
+        <CardContent
+          ref={messageContainerRef}
+          className="flex-grow overflow-y-scroll"
+        >
+          {chat.map((data: MessageType) => (
+            <Message key={data.id} {...data} />
+          ))}
+        </CardContent>
+        <CardFooter className="justify-center border-t-2 pb-8 pt-4">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -58,11 +145,15 @@ export default function WSEcho() {
                 name="message"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Message</FormLabel>
+                    <FormLabel hidden={true} aria-hidden>
+                      Message
+                    </FormLabel>
                     <FormControl>
-                      <Input placeholder="write here..." {...field} />
+                      <Input placeholder="message echo here..." {...field} />
                     </FormControl>
-                    <FormDescription>Talk to Echo!</FormDescription>
+                    <FormDescription hidden={true} aria-hidden>
+                      Talk to Echo!
+                    </FormDescription>
                     <FormMessage className="absolute text-nowrap" />
                   </FormItem>
                 )}
