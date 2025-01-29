@@ -38,7 +38,7 @@ export default function RootLayout({
             </Link>
             <Link
               className="flex items-center text-sm text-primary/70 hover:text-primary"
-              href="docs"
+              href="examples"
             >
               Examples
             </Link>

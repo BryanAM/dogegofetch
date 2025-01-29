@@ -1,3 +1,3 @@
 export default function Docs() {
-  return <div>docs</div>;
+  return <div>examples</div>;
 }
