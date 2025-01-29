@@ -24,7 +24,7 @@ export default function Home() {
           dozens of interactive examples. Master web requests quickly and unlock
           the full potential of APIs!
         </h2>
-        <Button className="col-span-2 md:col-span-1 md:col-start-1" asChild>
+        <Button className="col-span-3 md:col-span-1 md:col-start-1" asChild>
           <Link href="/docs">Go to Examples!</Link>
         </Button>
 
