@@ -1,16 +1,7 @@
-import HackerNews from "@/components/fetch/HackerNews/hackerNews";
-import { Weather } from "@/components/fetch/Weather/weather";
 import { Button } from "@/components/ui/button";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import Eco from "@/components/ws/echo/eco";
 
 import Link from "next/link";
+import LPCarousel from "./lpCarousel";
 
 export default function Home() {
   return (
@@ -24,25 +15,10 @@ export default function Home() {
           dozens of interactive examples. Master web requests quickly and unlock
           the full potential of APIs!
         </h2>
+        <LPCarousel />
         <Button className="col-span-3 md:col-span-1 md:col-start-1" asChild>
           <Link href="/docs">Go to Examples!</Link>
         </Button>
-
-        <Carousel className="col-span-6 col-start-2 row-start-4 mt-12 md:col-span-4 md:col-start-3">
-          <CarouselContent className="h-96">
-            <CarouselItem className="h-full overflow-auto">
-              <HackerNews />
-            </CarouselItem>
-            <CarouselItem className="h-96">
-              <Weather />
-            </CarouselItem>
-            <CarouselItem className="">
-              <Eco />
-            </CarouselItem>
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
       </main>
       <footer className="flex flex-wrap items-center justify-center gap-6"></footer>
     </div>
