@@ -63,7 +63,10 @@ export default function WSEcho() {
     return `${shortWeekday} ${hours}:${minutes}${amOrPm}`;
   }
 
-  const createNewMessage = (person: "me" | "echo", message: string) => {
+  const createNewMessage = (
+    person: "me" | "echo" | "connected" | "closed",
+    message?: string,
+  ) => {
     id.current += 1;
     return {
       person: person,
@@ -76,7 +79,7 @@ export default function WSEcho() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     const message: MessageType = createNewMessage("me", values.message);
     setChat((prev) => [...prev, message]);
-    if (socket?.OPEN) {
+    if (socket?.OPEN && message.message) {
       socket?.send(message.message);
     }
   }
@@ -95,6 +98,8 @@ export default function WSEcho() {
     ws.onopen = () => {
       console.log("Connected");
       setSoket(ws);
+      const message: MessageType = createNewMessage("connected");
+      setChat((prev) => [...prev, message]);
     };
 
     ws.onerror = (error) => {
@@ -106,6 +111,11 @@ export default function WSEcho() {
       const { data } = event;
       console.log("message recieved: ", data);
       const message: MessageType = createNewMessage("echo", data);
+      setChat((prev) => [...prev, message]);
+    };
+
+    ws.onclose = () => {
+      const message: MessageType = createNewMessage("closed");
       setChat((prev) => [...prev, message]);
     };
 
@@ -138,7 +148,7 @@ export default function WSEcho() {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="flex items-center space-x-8"
+              className="flex items-center space-x-2"
             >
               <FormField
                 control={form.control}
@@ -149,7 +159,7 @@ export default function WSEcho() {
                       Message
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="message echo here..." {...field} />
+                      <Input placeholder="type here..." {...field} />
                     </FormControl>
                     <FormDescription hidden={true} aria-hidden>
                       Talk to Echo!
@@ -158,11 +168,7 @@ export default function WSEcho() {
                   </FormItem>
                 )}
               />
-              <Button
-                className="mt-1"
-                type="submit"
-                disabled={!form.formState.isValid}
-              >
+              <Button type="submit" disabled={!form.formState.isValid}>
                 Send
               </Button>
             </form>
