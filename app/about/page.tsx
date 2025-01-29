@@ -9,10 +9,10 @@ export default function About() {
         <h1 className="text-3xl font-bold">About Doge Go Fetch</h1>
         <p>
           Doge Go Fetch is an application that showcases web APIs, asynchronous
-          JavaScript, and real-world data fetching. It's designed to be both
-          functional and visually engaging and hopefully a little bit
+          JavaScript, and real-world data fetching. It&apos;s designed to be
+          both functional and visually engaging and hopefully a little bit
           educational. Feel free to use copy or submit suggestions on how to
-          improve Doge Go Fetch's APIs examples.
+          improve Doge Go Fetch&apos;s APIs examples.
         </p>
       </div>
 
