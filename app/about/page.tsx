@@ -8,13 +8,11 @@ export default function About() {
       <div>
         <h1 className="text-3xl font-bold">About Doge Go Fetch</h1>
         <p>
-          This weather application is a showcase of web APIs, asynchronous
-          JavaScript, and real-world data fetching. Designed to be both
-          functional and visually engaging, the app leverages the many APIs to
-          display things from news, to daily temperature trends for selected
-          locations. The project highlights my skills in integrating RESTful
-          APIs, handling dynamic data with error resilience, and ensuring smooth
-          user interaction.
+          Doge Go Fetch is an application that showcases web APIs, asynchronous
+          JavaScript, and real-world data fetching. It's designed to be both
+          functional and visually engaging and hopefully a little bit
+          educational. Feel free to use copy or submit suggestions on how to
+          improve Doge Go Fetch's APIs examples.
         </p>
       </div>
 
@@ -65,6 +63,16 @@ export default function About() {
               rel="noopener noreferrer"
             >
               Tomorrow Weather API
+            </a>
+          </li>
+          <li>
+            <a
+              className="hover:font-bold focus:font-bold"
+              href="https://websocket.org/tools/websocket-echo-server/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              WebScoket Echo Server
             </a>
           </li>
         </ul>
