@@ -17,7 +17,7 @@ export default function Home() {
         </h2>
         <LPCarousel />
         <Button className="col-span-3 md:col-span-1 md:col-start-1" asChild>
-          <Link href="/docs">Go to Examples!</Link>
+          <Link href="/examples">Go to Examples!</Link>
         </Button>
       </main>
       <footer className="flex flex-wrap items-center justify-center gap-6"></footer>
