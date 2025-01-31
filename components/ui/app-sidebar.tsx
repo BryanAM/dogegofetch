@@ -1,5 +1,5 @@
 "use client";
-
+import { Fragment } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -11,35 +11,63 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const items = [
   {
-    title: "Introduction",
-    url: "/examples/introduction",
+    category: {
+      name: "Getting Started",
+      paths: [
+        {
+          title: "Introduction",
+          url: "/examples/introduction",
+        },
+      ],
+    },
+  },
+  {
+    category: {
+      name: "APIs",
+      paths: [
+        {
+          title: "api 1",
+          url: "/examples/api1",
+        },
+      ],
+    },
   },
 ];
 
 export function AppSidebar() {
+  const pathname = usePathname();
+
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-md font-bold text-black">
-            Getting Started
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+          {items.map(({ category }) => (
+            <Fragment key={category.name}>
+              <SidebarGroupLabel className="text-sm font-bold text-black">
+                {category.name}
+              </SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {category.paths.map((item) => (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={pathname === item.url}
+                      >
+                        <Link href={item.url}>
+                          <span>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </Fragment>
+          ))}
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
