@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.className} antialiased`}>
+      <body className={`${geistSans.className} flex flex-col antialiased`}>
         <header>
           <nav className="col flex gap-2 border-b-2 border-muted p-2">
             <Link className="flex items-center text-sm font-bold" href="/">
@@ -44,7 +44,6 @@ export default function RootLayout({
             </Link>
           </nav>
         </header>
-
         {children}
       </body>
     </html>

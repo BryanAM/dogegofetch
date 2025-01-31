@@ -7,7 +7,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SidebarProvider>
+    <SidebarProvider className="relative">
       <AppSidebar />
       <main>
         <SidebarTrigger />
