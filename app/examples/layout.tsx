@@ -10,7 +10,7 @@ export default function RootLayout({
     <SidebarProvider className="relative">
       <AppSidebar />
       <SidebarTrigger />
-      <main className="px-20 pt-8 md:px-28">{children}</main>
+      <main className="px-8 pt-8 md:px-8">{children}</main>
     </SidebarProvider>
   );
 }
