@@ -30,8 +30,16 @@ const items = [
       name: "APIs",
       paths: [
         {
-          title: "api 1",
-          url: "/examples/api1",
+          title: "News",
+          url: "/examples/news",
+        },
+        {
+          title: "Weather",
+          url: "/examples/weather",
+        },
+        {
+          title: "Websockets",
+          url: "/examples/websockets",
         },
       ],
     },
