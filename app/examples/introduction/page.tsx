@@ -34,6 +34,31 @@ export default function Introduction() {
           There is no better way to learn, than to try, and to try is to learn.
         </i>
       </p>
+
+      <p className="font-bold">Other Notes</p>
+      <ol>
+        <li className="ml-6 list-decimal">This is not an exhaustive list.</li>
+        <li className="ml-6 list-decimal">
+          For any suggestions or improvements create a PR.
+        </li>
+        <li className="ml-6 list-decimal">
+          If you have a web API you want to see implemented create a issue.
+        </li>
+        <li className="ml-6 list-decimal">
+          Any code on this web page is open and free to use without a license.
+        </li>
+        <li className="ml-6 list-decimal">
+          Contact? Reach out via my website...{" "}
+          <a
+            href="https://bryan-aument.surge.sh"
+            target="__blank"
+            rel="noopener noreferrer"
+            className="underline decoration-indigo-500 hover:font-bold"
+          >
+            Bryan Aument
+          </a>
+        </li>
+      </ol>
     </section>
   );
 }

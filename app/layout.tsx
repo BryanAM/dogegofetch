@@ -32,13 +32,13 @@ export default function RootLayout({
             </Link>
             <Link
               className="font-secondary flex items-center text-center text-sm text-primary/70 hover:text-primary"
-              href="about"
+              href="/about"
             >
               About
             </Link>
             <Link
               className="flex items-center text-sm text-primary/70 hover:text-primary"
-              href="examples"
+              href="/examples/introduction"
             >
               Examples
             </Link>
