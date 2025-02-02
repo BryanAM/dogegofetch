@@ -1,5 +1,7 @@
-import queryString from "querystring";
+"use client";
+
 import { WeatherChart } from "./weatherChart";
+import { useEffect, useState } from "react";
 
 type WeatherData = {
   [key in "new_york" | "san_diego"]: Array<{
@@ -8,26 +10,48 @@ type WeatherData = {
   }>;
 };
 
+const _weatherData: WeatherData = {
+  new_york: [
+    { time: formatDate("2025-01-23T11:00:00Z"), temperatureAvg: 74.84 },
+    { time: formatDate("2025-01-24T11:00:00Z"), temperatureAvg: 21.33 },
+    { time: formatDate("2025-01-25T11:00:00Z"), temperatureAvg: 22.6 },
+    { time: formatDate("2025-01-26T11:00:00Z"), temperatureAvg: 61.21 },
+    { time: formatDate("2025-01-27T11:00:00Z"), temperatureAvg: 27.67 },
+    { time: formatDate("2025-01-28T11:00:00Z"), temperatureAvg: 12.79 },
+  ],
+  san_diego: [
+    { time: formatDate("2025-01-23T11:00:00Z"), temperatureAvg: 54.84 },
+    { time: formatDate("2025-01-24T11:00:00Z"), temperatureAvg: 61.33 },
+    { time: formatDate("2025-01-25T11:00:00Z"), temperatureAvg: 72.6 },
+    { time: formatDate("2025-01-26T11:00:00Z"), temperatureAvg: 31.21 },
+    { time: formatDate("2025-01-27T11:00:00Z"), temperatureAvg: 67.67 },
+    { time: formatDate("2025-01-28T11:00:00Z"), temperatureAvg: 82.79 },
+  ],
+};
+
 async function getWeather(location: string) {
-  const API_KEY = process.env.WEATHER_API;
+  const API_KEY = process.env.NEXT_PUBLIC_WEATHER_API;
+  if (!API_KEY) {
+    throw new Error("API key is missing");
+  }
+
   const units = "imperial";
   const timestep = ["1d"];
   const weatherForecastURL = "https://api.tomorrow.io/v4/weather/forecast";
 
-  const weatherForecastParams = queryString.stringify(
-    {
-      location,
-      timestep,
-      units,
-    },
-    "&",
-  );
+  const params = new URLSearchParams({
+    location,
+    units,
+    timestep: timestep.join(","),
+  });
+
+  const weatherForecastParams = params.toString();
 
   const options = {
     method: "GET",
     headers: {
       accept: "application/json",
-      apikey: API_KEY || "",
+      apikey: API_KEY,
     },
   };
 
@@ -35,6 +59,10 @@ async function getWeather(location: string) {
     const res = await fetch(`${weatherForecastURL}?${weatherForecastParams}`, {
       ...options,
     });
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+
     return await res.json();
   } catch (err) {
     console.log("error getting weather data default to static data, ", err);
@@ -71,50 +99,49 @@ const cleanedData = (rawData: any) => {
   );
 };
 
-export async function Weather() {
-  let _rawNY;
-  let _rawSD;
+export function Weather() {
+  const [NY, setNY] = useState(null);
+  const [SD, setSD] = useState(null);
+  const [weatherData, setWeatherData] = useState<WeatherData>(_weatherData);
 
-  if (process.env.NODE_ENV === "production") {
-    [_rawNY, _rawSD] = await Promise.all([
-      getWeather("10001 US"),
-      getWeather("92115 US"),
-    ]);
-  } else {
-    _rawNY = null;
-    _rawSD = null;
-  }
+  useEffect(() => {
+    const fetchWeather = async () => {
+      if (process.env.NODE_ENV === "development") {
+        const [_rawNY, _rawSD] = await Promise.all([
+          getWeather("10001 US"),
+          getWeather("92115 US"),
+        ]);
 
-  let weatherData: WeatherData = {
-    new_york: [
-      { time: formatDate("2025-01-23T11:00:00Z"), temperatureAvg: 74.84 },
-      { time: formatDate("2025-01-24T11:00:00Z"), temperatureAvg: 21.33 },
-      { time: formatDate("2025-01-25T11:00:00Z"), temperatureAvg: 22.6 },
-      { time: formatDate("2025-01-26T11:00:00Z"), temperatureAvg: 61.21 },
-      { time: formatDate("2025-01-27T11:00:00Z"), temperatureAvg: 27.67 },
-      { time: formatDate("2025-01-28T11:00:00Z"), temperatureAvg: 12.79 },
-    ],
-    san_diego: [
-      { time: formatDate("2025-01-23T11:00:00Z"), temperatureAvg: 54.84 },
-      { time: formatDate("2025-01-24T11:00:00Z"), temperatureAvg: 61.33 },
-      { time: formatDate("2025-01-25T11:00:00Z"), temperatureAvg: 72.6 },
-      { time: formatDate("2025-01-26T11:00:00Z"), temperatureAvg: 31.21 },
-      { time: formatDate("2025-01-27T11:00:00Z"), temperatureAvg: 67.67 },
-      { time: formatDate("2025-01-28T11:00:00Z"), temperatureAvg: 82.79 },
-    ],
-  };
+        setNY({ ..._rawNY });
+        setSD({ ..._rawSD });
+        console.log("raw 1", _rawNY);
+        console.log("raw 2", _rawNY);
 
-  if (_rawNY && _rawSD) {
-    const nyDailyWeather = {
-      new_york: cleanedData(_rawNY?.timelines?.daily),
+        console.log("new 1", NY);
+        console.log("new 2", SD);
+
+        if (_rawNY && SD) {
+          const nyDailyWeather = {
+            new_york: cleanedData(NY?.timelines?.daily),
+          };
+
+          const sdDailyWeather = {
+            san_diego: cleanedData(SD?.timelines?.daily),
+          };
+
+          const newWeather = { ...nyDailyWeather, ...sdDailyWeather };
+          console.log("new", newWeather);
+
+          setWeatherData(newWeather);
+        }
+      } else {
+        setNY(null);
+        setSD(null);
+      }
     };
 
-    const sdDailyWeather = {
-      san_diego: cleanedData(_rawSD?.timelines?.daily),
-    };
-
-    weatherData = { ...nyDailyWeather, ...sdDailyWeather };
-  }
+    fetchWeather();
+  }, []);
 
   return (
     <section className="h-full w-full">
