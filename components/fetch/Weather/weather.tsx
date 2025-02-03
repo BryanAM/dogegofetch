@@ -100,40 +100,34 @@ const cleanedData = (rawData: any) => {
 };
 
 export function Weather() {
-  const [NY, setNY] = useState(null);
-  const [SD, setSD] = useState(null);
   const [weatherData, setWeatherData] = useState<WeatherData>(_weatherData);
 
   useEffect(() => {
     const fetchWeather = async () => {
-      if (process.env.NODE_ENV === "development") {
-        const [_rawNY, _rawSD] = await Promise.all([
-          getWeather("10001 US"),
-          getWeather("92115 US"),
-        ]);
+      if (process.env.NODE_ENV === "production") {
+        try {
+          const [_rawNY, _rawSD] = await Promise.all([
+            getWeather("10001 US"),
+            getWeather("92115 US"),
+          ]);
 
-        setNY({ ..._rawNY });
-        setSD({ ..._rawSD });
-        console.log("raw 1", _rawNY);
-        console.log("raw 2", _rawNY);
+          if (_rawNY && _rawSD) {
+            const nyDailyWeather = {
+              new_york: cleanedData(_rawNY?.timelines?.daily),
+            };
 
-        if (_rawNY && _rawSD) {
-          const nyDailyWeather = {
-            new_york: cleanedData(_rawNY?.timelines?.daily),
-          };
+            const sdDailyWeather = {
+              san_diego: cleanedData(_rawSD?.timelines?.daily),
+            };
 
-          const sdDailyWeather = {
-            san_diego: cleanedData(_rawSD?.timelines?.daily),
-          };
+            const newWeather = { ...nyDailyWeather, ...sdDailyWeather };
+            console.log("new", newWeather);
 
-          const newWeather = { ...nyDailyWeather, ...sdDailyWeather };
-          console.log("new", newWeather);
-
-          setWeatherData(newWeather);
+            setWeatherData(newWeather);
+          }
+        } catch (e) {
+          console.error(e);
         }
-      } else {
-        setNY(null);
-        setSD(null);
       }
     };
 

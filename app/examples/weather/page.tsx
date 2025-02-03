@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ExternalLinkIcon } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
+import { Weather as WeatherAPIChart } from "@/components/fetch/Weather/weather";
 
 export default function Weather() {
   return (
@@ -21,7 +22,7 @@ export default function Weather() {
 
       <h2 className="text-xl font-bold">Average Temperatures</h2>
       <p></p>
-      {/* <Weather /> */}
+      <WeatherAPIChart />
     </section>
   );
 }
