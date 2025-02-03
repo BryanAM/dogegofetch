@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.className} antialiased`}>
+      <body className={`${geistSans.className} flex flex-col antialiased`}>
         <header>
           <nav className="col flex gap-2 border-b-2 border-muted p-2">
             <Link className="flex items-center text-sm font-bold" href="/">
@@ -32,19 +32,18 @@ export default function RootLayout({
             </Link>
             <Link
               className="font-secondary flex items-center text-center text-sm text-primary/70 hover:text-primary"
-              href="about"
+              href="/about"
             >
               About
             </Link>
             <Link
               className="flex items-center text-sm text-primary/70 hover:text-primary"
-              href="docs"
+              href="/examples/introduction"
             >
               Examples
             </Link>
           </nav>
         </header>
-
         {children}
       </body>
     </html>
