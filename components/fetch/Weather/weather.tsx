@@ -117,16 +117,13 @@ export function Weather() {
         console.log("raw 1", _rawNY);
         console.log("raw 2", _rawNY);
 
-        console.log("new 1", NY);
-        console.log("new 2", SD);
-
-        if (_rawNY && SD) {
+        if (_rawNY && _rawSD) {
           const nyDailyWeather = {
-            new_york: cleanedData(NY?.timelines?.daily),
+            new_york: cleanedData(_rawNY?.timelines?.daily),
           };
 
           const sdDailyWeather = {
-            san_diego: cleanedData(SD?.timelines?.daily),
+            san_diego: cleanedData(_rawSD?.timelines?.daily),
           };
 
           const newWeather = { ...nyDailyWeather, ...sdDailyWeather };
