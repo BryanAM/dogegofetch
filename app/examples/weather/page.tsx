@@ -1,7 +1,13 @@
+import "server-only";
+
 import Link from "next/link";
 import { ExternalLinkIcon } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { Weather as WeatherAPIChart } from "@/components/fetch/Weather/weather";
+import sampleData from "./sampleData.json";
+import SyntaxHighlighter from "react-syntax-highlighter";
+
+import { CodeSnippet } from "@/components/code-snippet";
 
 export default function Weather() {
   return (
@@ -21,8 +27,27 @@ export default function Weather() {
       </Link>
 
       <h2 className="text-xl font-bold">Average Temperatures</h2>
-      <p></p>
+      <p>
+        The following data is taken from the Tomorrow.io weather API. Here we
+        are simply displaying the average temperatures from New York and San
+        Deigo as a time series graph.
+      </p>
       <WeatherAPIChart />
+
+      <h2 className="text-xl font-bold">Data Structure</h2>
+      <p>
+        The following is a sample response from the API. Here you can see the
+        <strong> time</strong> and <strong> average temperature</strong> values
+        we&apos;re using for our graph
+      </p>
+      <div className="max-h-56 overflow-scroll rounded bg-stone-100 p-2">
+        <pre>
+          <code>{JSON.stringify(sampleData, null, 2)}</code>
+        </pre>
+      </div>
+
+      <h2 className="text-xl font-bold">Sample Component and Implementation</h2>
+      <CodeSnippet relPath="components/fetch/Weather/weatherChart.tsx" />
     </section>
   );
 }
