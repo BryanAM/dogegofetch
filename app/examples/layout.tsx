@@ -9,7 +9,7 @@ export default function RootLayout({
   return (
     <SidebarProvider className="relative">
       <AppSidebar />
-      <SidebarTrigger />
+      <SidebarTrigger className="sticky top-0" />
       <main className="px-8 pt-8 md:px-8">{children}</main>
     </SidebarProvider>
   );
