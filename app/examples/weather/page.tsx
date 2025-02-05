@@ -21,7 +21,11 @@ export default function Weather() {
       </Link>
 
       <h2 className="text-xl font-bold">Average Temperatures</h2>
-      <p></p>
+      <p>
+        The following data is taken from the Tomorrow.io weather API. Here we
+        are simply displaying the average temperatures from New York and San
+        Deigo as a time series graph.
+      </p>
       <WeatherAPIChart />
     </section>
   );
